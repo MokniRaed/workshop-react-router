@@ -1,24 +1,34 @@
 import logo from './logo.svg';
 import './App.css';
+import Admin from './Components/Pages/Admin/Admin';
+import Categories from './Components/Pages/Categories/Categories';
+import Home from './Components/Pages/Home/Home';
+import Products from './Components/Pages/Products/Products';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import NavBar from './Components/NavBar/NavBar';
+import PrivateRouter from './Components/PrivateRouter';
+import { useState } from 'react';
 
 function App() {
+  const [auth,setAuth] = useState(false)
+
+  const Login = ()=>{
+    console.log('in the login function')
+    setAuth(!auth)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+    <NavBar Login={Login} auth={auth}  />
+    <Routes>
+      <Route path='/admin' element={<PrivateRouter isauth={auth}><Admin/></PrivateRouter> } />
+      <Route path='/categories' element={<Categories/>}/>
+      <Route path='/home' element={<Home/>}/>
+      <Route path='/products' element={<PrivateRouter isauth={auth}><Products/></PrivateRouter> }/>
+
+    </Routes>
+    </BrowserRouter>
+   
   );
 }
 
